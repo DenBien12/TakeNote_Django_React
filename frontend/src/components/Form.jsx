@@ -4,33 +4,34 @@ import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../style/Form.css"
 
-function Form({route, mehtod}){
-    const [username, setUsername] = userState("")
-    const [password, setPassword] = userState("")
-    const [loading, setLoading] = userState(false)
-    const navigate = useNavigate()
-    const name = methed === "login" ? "Login" : "Register"
+function Form({ route, method }) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSubmit =  async (e) => {
+    const name = method === "login" ? "Login" : "Register";
+
+    const handleSubmit = async (e) => {
         setLoading(true);
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            const res = await api.post(route, {username, password})
-            if(mehtod === "login"){
+            const res = await api.post(route, { username, password })
+            if (method === "login") {
                 localStorage.setItem(ACCESS_TOKEN, res.data.access);
-                localStorage.setItem(REFRESH_TOKEN, res.data.access);
+                localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
                 navigate("/")
-            } else{
-                navigate("/")
+            } else {
+                navigate("/login")
             }
-        }
-        catch (error){
+        } catch (error) {
             alert(error)
-        } finally{
+        } finally {
             setLoading(false)
         }
-    }
+    };
+
     return <form onSubmit={handleSubmit} className="form-container">
         <h1>{name}</h1>
         <input
@@ -44,8 +45,8 @@ function Form({route, mehtod}){
             className="form-input"
             type="password"
             value={password}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
         />
         <button className="form-button" type="submit">
             {name}
