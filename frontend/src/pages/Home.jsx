@@ -17,7 +17,13 @@ function Home(){
             .then((data) => {setNotes(data); console.log(data)})
             .catch((err) =>alert(err));
     }
-
+    const updateNote = (id) =>{
+        api.update('api/notes/update/${id}').then((res) =>{
+            if (res.status===200) alert("Note updated!")
+                else alert("Failsed to update note.")
+            getNotes()
+        }).catch((error) => alert(error))
+    }
     const deleteNote = (id) =>{
         api.delete(`/api/notes/delete/${id}`).then((res) =>{
             if (res.status===204) alert("Note deleted!")
@@ -61,7 +67,7 @@ function Home(){
             <br/>
             <textarea
             id="content"
-            name="conent"
+            name="content"
             required
             value={content}
             onChange={(e) => setContent(e.target.value)}
