@@ -1,45 +1,54 @@
 import React, { useState } from "react";
+import "../style/Note.css"
 
 function Note({note, onDelete, onChange}){
     const [isEditing, setIsEditing] =useState(false);
-    const [title, setTitle] = useState();
-    const [content, setContent] = useState();
+    const [title, setTitle] = useState(note.title);
+    const [content, setContent] = useState(note.content);
     const formattedDate = new Date(note.created_at).toDateString("en-US")
 
     const handleEdit = () => {
-        setIsEditing(true)
+        setIsEditing(true);
     };
 
-    const saveEdit = () =>{
-        onChange(note.id, title, content);
+    const handleSave = () => {
+        onUpdate(note.id, title, content);
         setIsEditing(false);
     };
 
-    const handleCancelEdit = () =>{
+    const handleCancel = () => {
         setIsEditing(false);
         setTitle(note.title);
         setContent(note.content);
     };
 
-    let viewMode = {};
-    let editMode = {};
-    if (isEditing){
-        viewMode.display = 'none';
-    } else{
-        editMode.display ='none';
-    }
-
     return <div className="note-container">
+            {isEditing ? (
+                <form onSubmit={handleSave}>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <textarea
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                    <button onClick={handleSave}>Save</button>
 
-                <p className="note-title">{note.title}</p>
-                <p className="note-content">{note.content}</p>
-                <p className="note-date">{formattedDate}</p>
-                <button className="update-button" onClick={handleEdit}>
-                Update
-                </button>
-                <button className="delete-button" onClick={() => onDelete(note.id)}>
-                Delete
-                </button>
+                    <button type="button" onClick={handleCancel}>
+                        Cancel
+                    </button>
+                </form>
+            ) : (
+                <>
+                    <p className="note-title">{note.title}</p>
+                    <p className="note-content">{note.content}</p>
+                    <p className="note-date">{formattedDate}</p>
+                    <button onClick={handleEdit}>Update</button>
+                    <button onClick={() => onDelete(note.id)}>Delete</button>
+                </>
+            )}
     </div>
 }
 

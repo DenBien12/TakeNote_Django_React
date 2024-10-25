@@ -17,13 +17,19 @@ function Home(){
             .then((data) => {setNotes(data); console.log(data)})
             .catch((err) =>alert(err));
     }
-    const updateNote = (id) =>{
-        api.update('api/notes/update/${id}').then((res) =>{
+    
+    const updateNote = (id, newTitle, newContent) =>{
+        console.log({ title: newTitle, content: newContent });
+        api.put(`/api/notes/update/${id}`, { 
+            title: newTitle, 
+            content: newContent 
+        }).then((res) =>{
             if (res.status===200) alert("Note updated!")
                 else alert("Failsed to update note.")
             getNotes()
         }).catch((error) => alert(error))
     }
+
     const deleteNote = (id) =>{
         api.delete(`/api/notes/delete/${id}`).then((res) =>{
             if (res.status===204) alert("Note deleted!")
@@ -48,7 +54,7 @@ function Home(){
     return <div>
         <div>
             <h2>Notes</h2>
-            {notes.map((note) => <Note note={note} onDelete={deleteNote} key={note.id}/>)}
+            {notes.map((note) => <Note note={note} onChange={updateNote} onDelete={deleteNote} key={note.id}/>)}
         </div>
         <h2>Create a Note</h2>
         
