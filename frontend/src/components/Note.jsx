@@ -12,7 +12,7 @@ function Note({note, onDelete, onChange}){
     };
 
     const handleSave = () => {
-        onUpdate(note.id, title, content);
+        onChange(note.id, title, content);
         setIsEditing(false);
     };
 
