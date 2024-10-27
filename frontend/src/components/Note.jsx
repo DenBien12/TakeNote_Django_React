@@ -5,6 +5,7 @@ function Note({note, onDelete, onChange}){
     const [isEditing, setIsEditing] =useState(false);
     const [title, setTitle] = useState(note.title);
     const [content, setContent] = useState(note.content);
+    const [completed, setCompleted] = useState(note.completed);
     const formattedDate = new Date(note.created_at).toDateString("en-US")
 
     const handleEdit = () => {
@@ -45,6 +46,7 @@ function Note({note, onDelete, onChange}){
                     <p className="note-title">{note.title}</p>
                     <p className="note-content">{note.content}</p>
                     <p className="note-date">{formattedDate}</p>
+                    <p><p>Completed: {note.completed ? "Yes" : "No"}</p></p>
                     <button onClick={handleEdit}>Update</button>
                     <button onClick={() => onDelete(note.id)}>Delete</button>
                 </>

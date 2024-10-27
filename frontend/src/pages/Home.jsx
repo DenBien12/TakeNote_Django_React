@@ -19,7 +19,6 @@ function Home(){
     }
     
     const updateNote = (id, newTitle, newContent) =>{
-        console.log({ title: newTitle, content: newContent });
         api.put(`/api/notes/update/${id}`, { 
             title: newTitle, 
             content: newContent 
