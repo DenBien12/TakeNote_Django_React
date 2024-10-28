@@ -5,8 +5,9 @@ function Note({note, onDelete, onChange}){
     const [isEditing, setIsEditing] =useState(false);
     const [title, setTitle] = useState(note.title);
     const [content, setContent] = useState(note.content);
-    const [completed, setCompleted] = useState(note.completed);
-    const formattedDate = new Date(note.created_at).toDateString("en-US")
+    const storedCompleted = localStorage.getItem(`note-${note.id}-completed`);
+    const initialCompleted = storedCompleted ? JSON.parse(storedCompleted) : note.completed;
+    const [completed, setCompleted] = useState(initialCompleted); 
 
     const handleEdit = () => {
         setIsEditing(true);
@@ -21,6 +22,12 @@ function Note({note, onDelete, onChange}){
         setIsEditing(false);
         setTitle(note.title);
         setContent(note.content);
+    };
+
+    const handleCheckboxChange = (event) => {
+        const newCompleted = event.target.checked;
+        setCompleted(newCompleted); 
+        localStorage.setItem(`note-${note.id}-completed`, newCompleted); 
     };
 
     return <div className="note-container">
@@ -43,12 +50,16 @@ function Note({note, onDelete, onChange}){
                 </form>
             ) : (
                 <>
+                    <input 
+                    type="checkbox" 
+                    checked={completed} 
+                    onChange={handleCheckboxChange} 
+                    />
                     <p className="note-title">{note.title}</p>
                     <p className="note-content">{note.content}</p>
-                    <p className="note-date">{formattedDate}</p>
-                    <p><p>Completed: {note.completed ? "Yes" : "No"}</p></p>
                     <button onClick={handleEdit}>Update</button>
                     <button onClick={() => onDelete(note.id)}>Delete</button>
+
                 </>
             )}
     </div>
